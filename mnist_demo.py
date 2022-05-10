@@ -34,7 +34,7 @@ if not os.path.exists(RESULT_DIR):
 
 
 
-# Size of the output map
+# Size of the output map 31
 out_size=(40,40)
 
 transform = transforms.Compose([transforms.ToTensor()])
