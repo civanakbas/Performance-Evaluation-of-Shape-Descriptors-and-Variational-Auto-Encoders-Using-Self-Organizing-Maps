@@ -12,7 +12,7 @@ import argparse
 
 
 parser = argparse.ArgumentParser(description="Self Organizing Map Implementation/ Demo on contours")
-parser.add_argument("--batch_size", type=int, default=32 ,help="Set the batch size")
+parser.add_argument("--batch_size", type=int, default=16 ,help="Set the batch size")
 parser.add_argument("--lr", type=float, default=0.3, help="Set the learning rate")
 parser.add_argument("--epoch", type=int, default=100)
 parser.add_argument("--result_dir", type=str, default="results/contour", help="Destionation folder for generated maps")
@@ -20,7 +20,7 @@ parser.add_argument("--train", type=bool, default=True)
 args = parser.parse_args()
 
 DATA_DIR = "dataset/contours"
-RESULT_DIR = "results/contour"
+RESULT_DIR = args.result_dir
 
 
 if not os.path.exists(RESULT_DIR):
@@ -30,7 +30,7 @@ args.result_dir
 batch_size= args.batch_size
 device = "cuda:0" if torch.cuda.is_available() else "cpu"
 total_epoch=args.epoch
-train = True
+train = args.train
 
 
 transform = transforms.ToTensor()
@@ -72,4 +72,3 @@ if train is True:
     som.save_result("%s/contour_result.png" % RESULT_DIR, (1,30,30))
 
 plt.show()
-
