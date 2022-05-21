@@ -27,7 +27,7 @@ class SOM(nn.Module):
     def _neighborhood_fn(
         self, input: torch.Tensor, current_sigma: float
     ) -> torch.Tensor:
-        ''' pow(e, -(input / sigma ** 2))'''
+        """ pow(e, -(input / sigma ** 2))"""
         input = input / current_sigma ** 2
         input = -input
         input = torch.exp(input)
@@ -43,7 +43,7 @@ class SOM(nn.Module):
         dists = self.pdist_fn(input, batch_weight).min(dim=1, keepdim=True)
 
         losses = dists[0]
-        bmu_indexes = dists[1] 
+        bmu_indexes = dists[1]
         bmu_locations = self.locations[bmu_indexes]
 
         return bmu_locations, losses.sum().div_(batch_size).item()

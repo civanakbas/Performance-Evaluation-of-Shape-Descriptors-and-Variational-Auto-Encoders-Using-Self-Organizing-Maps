@@ -7,7 +7,9 @@ from som import SOM
 colors = np.empty((0, 3), float)
 
 for i in range(10):
-    colors = np.append(colors, np.array([[random.random(), random.random(), random.random()]]), axis=0)
+    colors = np.append(
+        colors, np.array([[random.random(), random.random(), random.random()]]), axis=0
+    )
 
 data = torch.Tensor(colors)
 

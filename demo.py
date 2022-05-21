@@ -11,11 +11,18 @@ import matplotlib.pyplot as plt
 import argparse
 
 
-parser = argparse.ArgumentParser(description="Self Organizing Map Implementation/ Demo on contours")
-parser.add_argument("--batch_size", type=int, default=16 ,help="Set the batch size")
+parser = argparse.ArgumentParser(
+    description="Self Organizing Map Implementation/ Demo on contours"
+)
+parser.add_argument("--batch_size", type=int, default=16, help="Set the batch size")
 parser.add_argument("--lr", type=float, default=0.3, help="Set the learning rate")
 parser.add_argument("--epoch", type=int, default=100)
-parser.add_argument("--result_dir", type=str, default="results/contour", help="Destionation folder for generated maps")
+parser.add_argument(
+    "--result_dir",
+    type=str,
+    default="results/contour",
+    help="Destionation folder for generated maps",
+)
 parser.add_argument("--train", type=bool, default=True)
 args = parser.parse_args()
 
@@ -27,9 +34,9 @@ if not os.path.exists(RESULT_DIR):
     os.makedirs(RESULT_DIR)
 
 args.result_dir
-batch_size= args.batch_size
+batch_size = args.batch_size
 device = "cuda:0" if torch.cuda.is_available() else "cpu"
-total_epoch=args.epoch
+total_epoch = args.epoch
 train = args.train
 
 
@@ -37,14 +44,14 @@ transform = transforms.ToTensor()
 contour_list = []
 for filename in glob.glob(DATA_DIR + "/*.png"):
     im = Image.open(filename)
-    im = im.resize((30,30))
+    im = im.resize((30, 30))
     im = transform(im)
     contour_list.append(im)
 
 
 train_loader = DataLoader(contour_list, batch_size=batch_size, shuffle=True)
 
-som = SOM(input_size=30*30*1, out_size=(40,40))
+som = SOM(input_size=30 * 30 * 1, out_size=(40, 40))
 som = som.to(device)
 
 
@@ -65,10 +72,11 @@ if train is True:
         )
 
         if epoch % 5 == 0:
-            som.save_result("%s/contour_epoch_%d.png" % (RESULT_DIR, epoch), (1, 30, 30))
+            som.save_result(
+                "%s/contour_epoch_%d.png" % (RESULT_DIR, epoch), (1, 30, 30)
+            )
         plt.plot(losses)
 
-
-    som.save_result("%s/contour_result.png" % RESULT_DIR, (1,30,30))
+    som.save_result("%s/contour_result.png" % RESULT_DIR, (1, 30, 30))
 
 plt.show()
