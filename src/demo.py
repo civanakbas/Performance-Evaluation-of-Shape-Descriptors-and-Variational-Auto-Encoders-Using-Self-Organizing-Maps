@@ -28,7 +28,7 @@ if not os.path.exists(RESULT_DIR):
 
 args.result_dir
 batch_size= args.batch_size
-device = "cuda:0" if torch.cuda.is_available() else "cpu"
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 total_epoch=args.epoch
 train = args.train
 
@@ -45,16 +45,16 @@ for filename in glob.glob(DATA_DIR + "/*.png"):
 train_loader = DataLoader(contour_list, batch_size=batch_size, shuffle=True)
 
 som = SOM(input_size=30*30*1, out_size=(40,40))
-som = som.to(device)
-
+som = som.to("cpu")
 
 if train is True:
+    print(train)
     losses = []
     for epoch in range(total_epoch):
         running_loss = 0
         start_time = time.time()
         for idx, (X) in enumerate(train_loader):
-            X = X.view(-1, 30 * 30 * 1).to(device)
+            X = X.view(-1, 30 * 30 * 1).to("cpu")
             loss = som.self_organizing(X, epoch, total_epoch)
             running_loss += loss
 
