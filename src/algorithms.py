@@ -2,6 +2,7 @@ import numpy as np
 import cv2 as cv
 import matplotlib.pyplot as plt
 import os 
+import math
 
 class Algorithms():
     
@@ -85,3 +86,67 @@ class Algorithms():
                 all_polys.append(approx)
             return all_polys
             
+    def _calculate_compass_bearing(self, pt1, pt2):
+        """
+        Returns the bearing between two points.
+
+        pt1
+            A list representing the coordinates for the first point
+        pt2
+            A list representing the coordinates for the second point
+
+        Returns:
+          The bearing in degrees
+        """
+        lat1 = math.radians(pt1[0])
+        lat2 = math.radians(pt2[0])
+
+        diffLong = math.radians(pt2[1] - pt1[1])
+
+        x = math.sin(diffLong) * math.cos(lat2)
+        y = math.cos(lat1) * math.sin(lat2) - (math.sin(lat1)
+                * math.cos(lat2) * math.cos(diffLong))
+
+        initial_bearing = math.atan2(x, y)
+        initial_bearing = math.degrees(initial_bearing)
+        compass_bearing = (initial_bearing + 360) % 360
+
+        return compass_bearing
+        
+
+    def _check_direction(self, degree):
+        """
+        Returns the direction based on the degree
+        """
+        if 0 <= degree < 45:
+            return 0
+        if 45 <= degree < 90:
+            return 1
+        if 90 <= degree < 135:
+            return 2
+        if 135 <= degree < 180:
+            return 3
+        if 180 <= degree < 225:
+            return 4
+        if 225 <= degree < 270:
+            return 5
+        if 270 <= degree < 315:
+            return 6
+        if 315 <= degree < 360:
+            return 7
+
+    def get_chain_code_histogram(self, image):
+        histogram = [0] * 8
+        contours = self.get_all_contours(image)
+        contours = np.array(contours)
+        contours = contours.reshape(contours.shape[1],2)
+
+        for idx in range(len(contours) - 1):
+            degree = self._calculate_compass_bearing(contours[idx], contours[idx+1])
+            histogram[self._check_direction(degree)] += 1
+
+        return histogram
+
+
+
+    

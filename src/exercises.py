@@ -83,3 +83,15 @@ plt.show()
 #     des = cv.bitwise_not(des)
 #     cv.imwrite("../dataset/cut/obj_" + str(i) + ".png", des)
 #     i -= 1
+
+
+
+
+# ******** Example of chain code histogram for input image *******
+
+img = cv.imread("../dataset/cut/obj_21.png")
+contours = Alg.get_all_contours(img)
+contours = np.array(contours)
+contours = contours.reshape(81,2)
+histogram = Alg.get_chain_code_histogram(img)
+print(histogram)
