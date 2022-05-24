@@ -23,7 +23,7 @@ import os
 
 
 # ******** Example of polygonomial approximation.********
-img = cv.imread("../dataset/cut/obj_999.png")
+img = cv.imread("../dataset/cut/obj_21.png")
 Alg = Algorithms()
 contours = Alg.get_all_contours(image=img)
 
@@ -79,9 +79,14 @@ plt.show()
 
 # ******** Example of chain code histogram for input image *******
 
-img = cv.imread("../dataset/cut/obj_21.png")
-contours = Alg.get_all_contours(img)
-contours = np.array(contours)
-contours = contours.reshape(81, 2)
-histogram = Alg.get_chain_code_histogram(img)
-print(histogram)
+# img = cv.imread("../dataset/cut/obj_2.png")
+# contours = Alg.get_all_contours(img)
+# contours = np.array(contours)
+# contours = contours.reshape(contours.shape[1], 2)
+# histogram = Alg.get_chain_code_histogram(img)
+# print(histogram)
+
+
+# ******** Example of PGH for input image *******
+img = cv.imread("../dataset/cut/obj_2.png")
+print(Alg.calculate_histogram(img))

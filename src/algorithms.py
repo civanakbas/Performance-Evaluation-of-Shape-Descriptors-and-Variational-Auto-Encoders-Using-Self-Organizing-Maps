@@ -3,6 +3,7 @@ import cv2 as cv
 import matplotlib.pyplot as plt
 import os
 import math
+from scipy.spatial.distance import cdist
 
 
 class Algorithms:
@@ -29,7 +30,7 @@ class Algorithms:
             raw_gray_img = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
             th, bin_img = cv.threshold(raw_gray_img, 1, 255, cv.THRESH_OTSU)
             des = cv.bitwise_not(bin_img)
-            _, cnts, _ = cv.findContours(des, cv.RETR_CCOMP, cv.CHAIN_APPROX_SIMPLE)
+            cnts, _ = cv.findContours(des, cv.RETR_CCOMP, cv.CHAIN_APPROX_SIMPLE)
             return cnts
         else:
             contours = []
@@ -75,7 +76,7 @@ class Algorithms:
             for cnt in contours:
                 epsilon = epsilon * cv.arcLength(cnt, True)
                 approx = cv.approxPolyDP(cnt, epsilon, True)
-            return approx
+            return np.asarray(approx)
         else:
             all_polys = []
             contours = self.get_all_contours()
@@ -146,3 +147,48 @@ class Algorithms:
             histogram[self._check_direction(degree)] += 1
 
         return histogram
+
+    def _find_angle(self, M1, M2):
+        """Returns the angle between two slopes"""
+
+        angle = abs((M2 - M1) / (1 + M1 * M2))
+        ret = math.atan(angle)
+
+        # radian to degree
+        val = math.degrees(ret)
+
+        # Print the result
+        return round(val)
+
+    def _calculate_slope(self, pt1, pt2):
+        """Returns the slope between two points"""
+        return (pt1[1] - pt2[1]) / (pt1[0] - pt2[0])
+
+    def calculate_histogram(self, img):
+        histogram = np.zeros([141, 180], dtype=np.uint8)
+        approx = self.get_all_poly_points(img)
+        approx = approx.reshape(approx.shape[0], approx.shape[2])
+        lines = []
+        for i in range(len(approx) - 1):
+            lines.append([approx[i], approx[i + 1]])
+
+        i = 0
+        while i < len(lines):
+            j = i + 1
+            while j < len(lines):
+                slope1 = self._calculate_slope(lines[i][0], lines[i][1])
+                slope2 = self._calculate_slope(lines[j][0], lines[j][1])
+                angle = self._find_angle(slope1, slope2)
+
+                dists = cdist(lines[i], lines[j])
+                max_value = round(dists.max())
+                min_value = round(dists.min())
+                histogram[max_value][angle] += 1
+                histogram[min_value][angle] += 1
+                j = j + 1
+            i = i + 1
+
+        col = np.sum(histogram, axis=0)
+        row = np.sum(histogram, axis=1)
+
+        return np.concatenate((row, col))
