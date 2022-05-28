@@ -162,6 +162,8 @@ class Algorithms:
 
     def _calculate_slope(self, pt1, pt2):
         """Returns the slope between two points"""
+        if (pt1[0] - pt2[0]) == 0:
+            return 1
         return (pt1[1] - pt2[1]) / (pt1[0] - pt2[0])
 
     def calculate_histogram(self, img):

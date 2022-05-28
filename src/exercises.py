@@ -80,9 +80,6 @@ plt.show()
 # ******** Example of chain code histogram for input image *******
 
 # img = cv.imread("../dataset/cut/obj_2.png")
-# contours = Alg.get_all_contours(img)
-# contours = np.array(contours)
-# contours = contours.reshape(contours.shape[1], 2)
 # histogram = Alg.get_chain_code_histogram(img)
 # print(histogram)
 
