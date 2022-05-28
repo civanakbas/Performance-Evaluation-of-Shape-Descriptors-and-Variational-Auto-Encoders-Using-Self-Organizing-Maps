@@ -1,4 +1,3 @@
-import os
 import torch
 import time
 import matplotlib.pyplot as plt
