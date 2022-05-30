@@ -6,7 +6,7 @@ from algorithms import Algorithms
 import os
 
 # ----------UNCOMMEND THE EXERCISE YOU WISH-----------
-
+Alg = Algorithms()
 
 # ****** Getting all contours and polys at once ******
 # Alg = Algorithms()
@@ -23,40 +23,40 @@ import os
 
 
 # ******** Example of polygonomial approximation.********
-img = cv.imread("../dataset/cut/obj_21.png")
-Alg = Algorithms()
-contours = Alg.get_all_contours(image=img)
+# img = cv.imread("../dataset/cut/obj_21.png")
+# Alg = Algorithms()
+# contours = Alg.get_all_contours(image=img)
 
-img_1 = np.zeros([100, 100, 1], dtype=np.uint8)
-img_2 = np.zeros([100, 100, 1], dtype=np.uint8)
-img_3 = np.zeros([100, 100, 1], dtype=np.uint8)
-img_4 = np.zeros([100, 100, 1], dtype=np.uint8)
-img_1.fill(255)
-img_2.fill(255)
-img_3.fill(255)
-img_4.fill(255)
+# img_1 = np.zeros([100, 100, 1], dtype=np.uint8)
+# img_2 = np.zeros([100, 100, 1], dtype=np.uint8)
+# img_3 = np.zeros([100, 100, 1], dtype=np.uint8)
+# img_4 = np.zeros([100, 100, 1], dtype=np.uint8)
+# img_1.fill(255)
+# img_2.fill(255)
+# img_3.fill(255)
+# img_4.fill(255)
 
-for cnt in contours:
-    approx = Alg.get_all_poly_points(img)
-    print(type(approx), approx.shape)
-    cv.drawContours(img_1, [approx], 0, (0), 1)
-    hull = cv.convexHull(cnt)
-    cv.drawContours(img_2, [hull], 0, (0), 1)
+# for cnt in contours:
+#     approx = Alg.get_all_poly_points(img)
+#     print(type(approx), approx.shape)
+#     cv.drawContours(img_1, [approx], 0, (0), 1)
+#     hull = cv.convexHull(cnt)
+#     cv.drawContours(img_2, [hull], 0, (0), 1)
 
-    approx = Alg.get_all_poly_points(img, 0.02)
-    cv.drawContours(img_3, [approx], 0, (0), 1)
+#     approx = Alg.get_all_poly_points(img, 0.02)
+#     cv.drawContours(img_3, [approx], 0, (0), 1)
 
-fig, axs = plt.subplots(nrows=2, ncols=2)
-axs[0, 0].set_title("Poly Aprx. | Epsilon = 0.01")
-axs[0, 1].set_title("Poly Aprx. | Epsilon = 0.02")
-axs[1, 0].set_title("Convex Hull")
-axs[1, 1].set_title("Original -> Not Contour")
-axs[0, 0].imshow(img_1)
-axs[1, 0].imshow(img_2)
-axs[0, 1].imshow(img_3)
-axs[1, 1].imshow(img)
+# fig, axs = plt.subplots(nrows=2, ncols=2)
+# axs[0, 0].set_title("Poly Aprx. | Epsilon = 0.01")
+# axs[0, 1].set_title("Poly Aprx. | Epsilon = 0.02")
+# axs[1, 0].set_title("Convex Hull")
+# axs[1, 1].set_title("Original -> Not Contour")
+# axs[0, 0].imshow(img_1)
+# axs[1, 0].imshow(img_2)
+# axs[0, 1].imshow(img_3)
+# axs[1, 1].imshow(img)
 
-plt.show()
+# plt.show()
 
 
 # ********Adjusting all data to the same format*******
@@ -85,5 +85,34 @@ plt.show()
 
 
 # ******** Example of PGH for input image *******
-img = cv.imread("../dataset/cut/obj_2.png")
-print(Alg.calculate_histogram(img))
+# img = cv.imread("../dataset/cut/obj_2.png")
+# print(Alg.calculate_histogram(img))
+
+# ******** Example of ChordArc for input image ******** 
+img = cv.imread("../dataset/cut/obj_930.png")
+img_1 = np.zeros([100, 100, 1], dtype=np.uint8)
+img_1.fill(255)
+poly = Alg.get_all_poly_points(img)
+print("Feature Set: ",Alg.get_chord_arc(poly))
+cv.drawContours(img_1,[poly],-1,0,1)
+plt.imshow(img_1)
+plt.show()
+
+
+
+#****** Example of get_vector_angle* ******
+# points = np.array([[0,0],[0,2],[2,2],[0,2 + 2*np.sqrt(3)],[2,2 + 2*np.sqrt(3)],[4 + (2/np.sqrt(3)),0]])
+# result = Alg.get_vector_angle(points)
+
+
+
+
+
+#******** Example of Basic Methods **********
+
+# img = cv.imread("../dataset/cut/obj_3.png")
+# contours = Alg.get_all_contours(image=img)
+# Alg.get_basics(img)
+
+
+ 
