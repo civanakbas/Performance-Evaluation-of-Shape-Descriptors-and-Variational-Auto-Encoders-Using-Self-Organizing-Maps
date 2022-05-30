@@ -88,31 +88,24 @@ Alg = Algorithms()
 # img = cv.imread("../dataset/cut/obj_2.png")
 # print(Alg.calculate_histogram(img))
 
-# ******** Example of ChordArc for input image ******** 
+# ******** Example of ChordArc for input image ********
 img = cv.imread("../dataset/cut/obj_930.png")
 img_1 = np.zeros([100, 100, 1], dtype=np.uint8)
 img_1.fill(255)
 poly = Alg.get_all_poly_points(img)
-print("Feature Set: ",Alg.get_chord_arc(poly))
-cv.drawContours(img_1,[poly],-1,0,1)
+print("Feature Set: ", Alg.get_chord_arc(poly))
+cv.drawContours(img_1, [poly], -1, 0, 1)
 plt.imshow(img_1)
 plt.show()
 
 
-
-#****** Example of get_vector_angle* ******
+# ****** Example of get_vector_angle* ******
 # points = np.array([[0,0],[0,2],[2,2],[0,2 + 2*np.sqrt(3)],[2,2 + 2*np.sqrt(3)],[4 + (2/np.sqrt(3)),0]])
 # result = Alg.get_vector_angle(points)
 
 
-
-
-
-#******** Example of Basic Methods **********
+# ******** Example of Basic Methods **********
 
 # img = cv.imread("../dataset/cut/obj_3.png")
 # contours = Alg.get_all_contours(image=img)
 # Alg.get_basics(img)
-
-
- 
