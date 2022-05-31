@@ -141,12 +141,14 @@ class Algorithms:
         contours = self.get_all_contours(image)
         contours = np.array(contours)
         contours = contours.reshape(contours.shape[1], 2)
+        print(len(contours))
 
         for idx in range(len(contours) - 1):
             degree = self._calculate_compass_bearing(contours[idx], contours[idx + 1])
             histogram[self._check_direction(degree)] += 1
+            n_histogram = [item / len(contours) for item in histogram]
 
-        return histogram
+        return n_histogram
 
     def _find_angle(self, M1, M2):
         """Returns the angle between two slopes"""
