@@ -26,9 +26,9 @@ for filename in sorted(glob.glob(DATA_DIR + "/*.png"), key=get_order):
     im = cv2.imread(filename)
     raw_gray_img = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
     th, bin_img = cv2.threshold(raw_gray_img, 127, 255, cv2.THRESH_OTSU)
-    des = cv2.bitwise_not(bin_img) / 255
-    des = des.reshape(1, 100, 100)
-    contour_list.append(des)
+    bin_img = bin_img / 255
+    im = bin_img.reshape(1, 100, 100)
+    contour_list.append(im)
 
 
 RESULT_DIR = "../results/vae_results/contour/"
