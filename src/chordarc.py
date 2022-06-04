@@ -1,3 +1,4 @@
+
 import torch
 import time
 import matplotlib.pyplot as plt
@@ -11,6 +12,7 @@ import math
 from som import SOM
 from algorithms import Algorithms
 import pickle
+from sklearn import preprocessing
 
 Alg = Algorithms()
 device = "cuda:0" if torch.cuda.is_available() else "cpu"
@@ -32,23 +34,25 @@ def get_order(file):
         return math.inf
     return int(match.groups()[0])
 
-
 image_list = []
 for filename in sorted(glob.glob(DATA_DIR + "/*.png"), key=get_order):
     im = cv2.imread(filename)
     image_list.append(im)
 
-histogram_list = []
+chord_arch_list = []
 for img in image_list:
-    histogram_list.append(Alg.calculate_histogram(img))
+    polys = Alg.get_all_poly_points(img)
+    chord_arch_list.append(Alg.get_chord_arc(polys))
+
+chord_arch_list = preprocessing.normalize(chord_arch_list)
 
 transform = transforms.ToTensor()
-histogram_list = torch.Tensor(histogram_list)
+chord_arch_list = torch.Tensor(chord_arch_list)
 
-train_loader = DataLoader(histogram_list, batch_size=batch_size, shuffle=False)
+train_loader = DataLoader(chord_arch_list, batch_size=batch_size, shuffle=True)
 
 
-som = SOM(input_size=321 * 1, out_size=out_size)
+som = SOM(input_size=7 * 1, out_size=out_size)
 som = som.to(device)
 
 
@@ -58,7 +62,7 @@ if train is True:
         running_loss = 0
         start_time = time.time()
         for idx, (X) in enumerate(train_loader):
-            X = X.view(-1, 321 * 1).to(device)
+            X = X.view(-1, 7 * 1).to(device)
             loss = som.self_organizing(X, epoch, total_epoch)
             running_loss += loss
 
@@ -72,7 +76,7 @@ if train is True:
         plt.plot(losses)
 
 
-bmu_locations, _ = som.forward(histogram_list.to(device))
+bmu_locations, _ = som.forward(chord_arch_list.to(device))
 bmu_locations = (
     bmu_locations.to("cpu")
     .detach()
@@ -81,6 +85,6 @@ bmu_locations = (
     .reshape(bmu_locations.shape[0], bmu_locations.shape[2])
 )
 print(bmu_locations)
-pickle.dump(bmu_locations, open("../bmu_locations/bmu_locations_pgh.pkl", "wb"))
+pickle.dump(bmu_locations, open("../bmu_locations/bmu_locations_ca.pkl", "wb"))
 
 plt.show()

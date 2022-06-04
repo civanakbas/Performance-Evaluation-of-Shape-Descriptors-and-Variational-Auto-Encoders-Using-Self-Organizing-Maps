@@ -32,23 +32,22 @@ def get_order(file):
         return math.inf
     return int(match.groups()[0])
 
-
 image_list = []
 for filename in sorted(glob.glob(DATA_DIR + "/*.png"), key=get_order):
     im = cv2.imread(filename)
     image_list.append(im)
 
-histogram_list = []
+cbsd_list = []
 for img in image_list:
-    histogram_list.append(Alg.calculate_histogram(img))
+    cbsd_list.append(Alg.get_basics(img))
 
 transform = transforms.ToTensor()
-histogram_list = torch.Tensor(histogram_list)
+cbsd_list = torch.Tensor(cbsd_list)
 
-train_loader = DataLoader(histogram_list, batch_size=batch_size, shuffle=False)
+train_loader = DataLoader(cbsd_list, batch_size=batch_size, shuffle=False)
 
 
-som = SOM(input_size=321 * 1, out_size=out_size)
+som = SOM(input_size=4 * 1, out_size=out_size)
 som = som.to(device)
 
 
@@ -58,7 +57,7 @@ if train is True:
         running_loss = 0
         start_time = time.time()
         for idx, (X) in enumerate(train_loader):
-            X = X.view(-1, 321 * 1).to(device)
+            X = X.view(-1, 4 * 1).to(device)
             loss = som.self_organizing(X, epoch, total_epoch)
             running_loss += loss
 
@@ -72,7 +71,7 @@ if train is True:
         plt.plot(losses)
 
 
-bmu_locations, _ = som.forward(histogram_list.to(device))
+bmu_locations, _ = som.forward(cbsd_list.to(device))
 bmu_locations = (
     bmu_locations.to("cpu")
     .detach()
@@ -81,6 +80,6 @@ bmu_locations = (
     .reshape(bmu_locations.shape[0], bmu_locations.shape[2])
 )
 print(bmu_locations)
-pickle.dump(bmu_locations, open("../bmu_locations/bmu_locations_pgh.pkl", "wb"))
+pickle.dump(bmu_locations, open("../bmu_locations/bmu_locations_cbsd.pkl", "wb"))
 
 plt.show()

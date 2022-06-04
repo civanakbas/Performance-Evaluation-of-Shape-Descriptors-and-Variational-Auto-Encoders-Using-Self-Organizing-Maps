@@ -10,18 +10,19 @@ from pathlib import Path
 import math
 from som import SOM
 from algorithms import Algorithms
+import pickle
 
 Alg = Algorithms()
 device = "cuda:0" if torch.cuda.is_available() else "cpu"
 
 DATA_DIR = "../dataset/cut/"
 batch_size = 32
-total_epoch = 100
+total_epoch = 200
 train = True
 
 
 # Size of the output map
-out_size = (40, 40)
+out_size = (17, 17)
 
 file_pattern = re.compile(r".*?(\d+).*?")
 
@@ -45,9 +46,9 @@ for img in image_list:
 transform = transforms.ToTensor()
 cch_list = torch.Tensor(cch_list)
 
-train_loader = DataLoader(cch_list, batch_size=batch_size, shuffle=True)
+train_loader = DataLoader(cch_list, batch_size=batch_size, shuffle=False)
 
-som = SOM(input_size=8 * 1, out_size=(30, 30))
+som = SOM(input_size=8 * 1, out_size=out_size)
 som = som.to(device)
 
 if train is True:
@@ -79,5 +80,6 @@ bmu_locations = (
     .reshape(bmu_locations.shape[0], bmu_locations.shape[2])
 )
 print(bmu_locations)
-
+pickle.dump(bmu_locations, open("../bmu_locations/bmu_locations_cch.pkl", "wb"))
 plt.show()
+print(type(cch_list))

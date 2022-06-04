@@ -20,7 +20,7 @@ parser.add_argument("--epoch", type=int, default=100)
 parser.add_argument(
     "--result_dir",
     type=str,
-    default="results/contour",
+    default="../results/contour",
     help="Destionation folder for generated maps",
 )
 parser.add_argument("--train", type=bool, default=True)

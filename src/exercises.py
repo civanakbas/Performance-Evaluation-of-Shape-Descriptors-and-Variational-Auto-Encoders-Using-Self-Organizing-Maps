@@ -102,7 +102,7 @@ np.set_printoptions(suppress=True)
 # print(Alg.calculate_histogram(img))
 
 # ******** Example of ChordArc for input image ******** 
-img = cv.imread("../dataset/cut/obj_13.png",cv.IMREAD_GRAYSCALE)
+img = cv.imread("../dataset/cut/obj_13.png")
 img_1 = np.zeros([100, 100, 1], dtype=np.uint8)
 img_1.fill(255)
 poly = Alg.get_all_poly_points(img)

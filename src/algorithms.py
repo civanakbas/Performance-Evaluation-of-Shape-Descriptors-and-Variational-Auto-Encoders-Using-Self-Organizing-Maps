@@ -29,8 +29,9 @@ class Algorithms:
                     ]]] . 
         """
         if image is not None:
-            print(image.shape)
-            des = cv.bitwise_not(image)
+            raw_gray_img = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
+            th, bin_img = cv.threshold(raw_gray_img, 1, 255, cv.THRESH_OTSU)
+            des = cv.bitwise_not(bin_img)
             cnts, _ = cv.findContours(des, cv.RETR_CCOMP, cv.CHAIN_APPROX_SIMPLE)
             return cnts
         else:
@@ -144,8 +145,9 @@ class Algorithms:
         for idx in range(len(contours) - 1):
             degree = self._calculate_compass_bearing(contours[idx], contours[idx + 1])
             histogram[self._check_direction(degree)] += 1
+        n_histogram = [item / len(contours) for item in histogram]
 
-        return histogram
+        return n_histogram
 
     def _find_angle(self, M1, M2):
         """Returns the angle between two slopes"""
