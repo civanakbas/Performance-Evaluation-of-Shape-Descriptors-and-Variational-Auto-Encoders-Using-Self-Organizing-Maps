@@ -4,9 +4,12 @@ import matplotlib.pyplot as plt
 import numpy as np
 from algorithms import Algorithms
 import os
+import time
 
 # ----------UNCOMMEND THE EXERCISE YOU WISH-----------
+start = time.time()
 Alg = Algorithms()
+np.set_printoptions(suppress=True)
 
 # ****** Getting all contours and polys at once ******
 # Alg = Algorithms()
@@ -23,7 +26,7 @@ Alg = Algorithms()
 
 
 # ******** Example of polygonomial approximation.********
-# img = cv.imread("../dataset/cut/obj_21.png")
+# img = cv.imread("../dataset/cut/obj_122.png",cv.IMREAD_GRAYSCALE)
 # Alg = Algorithms()
 # contours = Alg.get_all_contours(image=img)
 
@@ -46,18 +49,28 @@ Alg = Algorithms()
 #     approx = Alg.get_all_poly_points(img, 0.02)
 #     cv.drawContours(img_3, [approx], 0, (0), 1)
 
-# fig, axs = plt.subplots(nrows=2, ncols=2)
-# axs[0, 0].set_title("Poly Aprx. | Epsilon = 0.01")
-# axs[0, 1].set_title("Poly Aprx. | Epsilon = 0.02")
-# axs[1, 0].set_title("Convex Hull")
-# axs[1, 1].set_title("Original -> Not Contour")
-# axs[0, 0].imshow(img_1)
-# axs[1, 0].imshow(img_2)
-# axs[0, 1].imshow(img_3)
-# axs[1, 1].imshow(img)
 
+
+
+
+# axs[1].imshow(img_2)
+# axs[0].imshow(img)
+# axs[0].axes.xaxis.set_visible(False)
+# axs[0].axes.yaxis.set_visible(False)
+# axs[1].axes.xaxis.set_visible(False)
+# axs[1].axes.yaxis.set_visible(False)
+# figure = plt.figure(figsize=(12,6))
+# axes1 = plt.imshow(img)
+# axes1.set_facecolor('green')
 # plt.show()
 
+# img_2=cv.resize(img_2,[200,200],interpolation=cv.INTER_CUBIC)
+# cv.imshow("bro",img)
+# cv.imwrite("C:/Users/acuzum/OneDrive/Pictures/img_2.png",img_2)
+# cv.waitKey(0) 
+  
+#closing all open windows 
+# cv.destroyAllWindows() 
 
 # ********Adjusting all data to the same format*******
 # i = 999
@@ -65,7 +78,7 @@ Alg = Algorithms()
 #     f = os.path.join("../dataset/cut",f)
 
 #     img = cv.imread(f)
-#     raw_gray_img = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
+#     raw_gray_img = cv.cvtColor(img, cv.COLOR_BGR2GRAY,)
 #     th, bin_img = cv.threshold(raw_gray_img, 1, 255, cv.THRESH_OTSU)
 #     des = cv.bitwise_not(bin_img)
 #     _,contour,_ = cv.findContours(des,cv.RETR_CCOMP,cv.CHAIN_APPROX_SIMPLE)
@@ -79,33 +92,41 @@ Alg = Algorithms()
 
 # ******** Example of chain code histogram for input image *******
 
-# img = cv.imread("../dataset/cut/obj_2.png")
+# img = cv.imread("../dataset/cut/obj_2.png",cv.IMREAD_GRAYSCALE)
 # histogram = Alg.get_chain_code_histogram(img)
 # print(histogram)
 
 
 # ******** Example of PGH for input image *******
-# img = cv.imread("../dataset/cut/obj_2.png")
+# img = cv.imread("../dataset/cut/obj_2.png",cv.IMREAD_GRAYSCALE)
 # print(Alg.calculate_histogram(img))
 
-# ******** Example of ChordArc for input image ********
-img = cv.imread("../dataset/cut/obj_930.png")
+# ******** Example of ChordArc for input image ******** 
+img = cv.imread("../dataset/cut/obj_13.png",cv.IMREAD_GRAYSCALE)
 img_1 = np.zeros([100, 100, 1], dtype=np.uint8)
 img_1.fill(255)
 poly = Alg.get_all_poly_points(img)
-print("Feature Set: ", Alg.get_chord_arc(poly))
-cv.drawContours(img_1, [poly], -1, 0, 1)
+print("Feature Set: ",Alg.get_chord_arc(poly))
+cv.drawContours(img_1,[poly],-1,0,1)
 plt.imshow(img_1)
 plt.show()
 
 
-# ****** Example of get_vector_angle* ******
+
+#****** Example of get_vector_angle* ******
 # points = np.array([[0,0],[0,2],[2,2],[0,2 + 2*np.sqrt(3)],[2,2 + 2*np.sqrt(3)],[4 + (2/np.sqrt(3)),0]])
 # result = Alg.get_vector_angle(points)
 
 
+
+
+
 # ******** Example of Basic Methods **********
 
-# img = cv.imread("../dataset/cut/obj_3.png")
-# contours = Alg.get_all_contours(image=img)
+# img = cv.imread("../dataset/cut/obj_150.png",cv.IMREAD_GRAYSCALE)
+
 # Alg.get_basics(img)
+# plt.imshow(img)
+# plt.show()
+end = time.time()
+print("Execution time: ", end-start)
