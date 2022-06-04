@@ -51,8 +51,8 @@ encoded_with_batch = []
 with torch.no_grad():
     for i, images in enumerate(train_loader):
         images = images.to(device)
-        mu,log_var = model.encode(images.view(-1,100*100))
-        enc = model.reparameterize(mu,log_var)
+        mu, log_var = model.encode(images.view(-1, 100 * 100))
+        enc = model.reparameterize(mu, log_var)
         encoded_with_batch.append(enc)
 
 
@@ -65,17 +65,18 @@ def unbatch(tensor):
 
 
 from som import SOM
+
 batch_size = 16
 total_epoch = 200
 train = True
 
-out_size = (17,17)
+out_size = (17, 17)
 transform = transforms.ToTensor()
 vae_encoded_list = torch.Tensor(unbatch(encoded_with_batch))
 vae_encoded_list = vae_encoded_list.cpu()
 
-train_loader = DataLoader(vae_encoded_list, batch_size=batch_size,shuffle=False)
-som = SOM(input_size=20*1, out_size=out_size)
+train_loader = DataLoader(vae_encoded_list, batch_size=batch_size, shuffle=False)
+som = SOM(input_size=20 * 1, out_size=out_size)
 som = som.to(device)
 
 if train is True:

@@ -1,4 +1,3 @@
-
 import torch
 import time
 import matplotlib.pyplot as plt
@@ -33,6 +32,7 @@ def get_order(file):
     if not match:
         return math.inf
     return int(match.groups()[0])
+
 
 image_list = []
 for filename in sorted(glob.glob(DATA_DIR + "/*.png"), key=get_order):

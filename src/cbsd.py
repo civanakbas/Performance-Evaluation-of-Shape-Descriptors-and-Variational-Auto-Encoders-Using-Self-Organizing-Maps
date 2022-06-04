@@ -32,6 +32,7 @@ def get_order(file):
         return math.inf
     return int(match.groups()[0])
 
+
 image_list = []
 for filename in sorted(glob.glob(DATA_DIR + "/*.png"), key=get_order):
     im = cv2.imread(filename)
