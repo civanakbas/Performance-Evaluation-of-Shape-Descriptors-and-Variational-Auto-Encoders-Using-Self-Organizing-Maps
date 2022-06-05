@@ -229,8 +229,8 @@ class Algorithms:
 
         """
         sinc_lut = {}
-        for i in range(361):
-            res = round(math.degrees(np.sinc(math.radians(i) / np.pi)))
+        for i in range(360):
+            res = round(math.degrees(np.sinc(math.radians(i) / np.pi)), 4)
             sinc_lut[res] = i
         start = points[0]
         stop = points[2]
@@ -254,7 +254,7 @@ class Algorithms:
                         stop = temp[1]
                         x = round(
                             math.degrees(np.linalg.norm(start - stop) / arc_length)
-                        )
+                        ,4)
                         x = self._get_sinc_degree(sinc_lut, x)
                         concave_angles.append(sinc_lut[x])
                         start = temp[0]
@@ -275,7 +275,7 @@ class Algorithms:
                         stop = temp[2]
                         x = round(
                             math.degrees(np.linalg.norm(start - stop) / arc_length)
-                        )
+                        ,4)
                         x = self._get_sinc_degree(sinc_lut, x)
                         if curr > 0:
                             concave_angles.append(sinc_lut[x])
@@ -290,7 +290,7 @@ class Algorithms:
                         stop = temp[1]
                         x = round(
                             math.degrees(np.linalg.norm(start - stop) / arc_length)
-                        )
+                        ,4)
                         x = self._get_sinc_degree(sinc_lut, x)
                         print("convex bulduk ve ekledik")
                         convex_angles.append(sinc_lut[x])
@@ -310,7 +310,7 @@ class Algorithms:
                         stop = temp[2]
                         x = round(
                             math.degrees(np.linalg.norm(start - stop) / arc_length)
-                        )
+                        ,4)
                         x = self._get_sinc_degree(sinc_lut, x)
                         if curr > 0:
                             concave_angles.append(sinc_lut[x])
@@ -429,6 +429,8 @@ class Algorithms:
         #             area += 1
         method_3 = (4 * np.pi * area) / (perimeter ** 2)
         print("Compactness: ", method_3)
+
+
 
         # Circular Variance
         dists_to_var = []

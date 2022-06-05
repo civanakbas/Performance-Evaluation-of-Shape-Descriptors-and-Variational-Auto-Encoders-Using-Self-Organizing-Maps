@@ -1,7 +1,12 @@
+import glob
+import math
+from pathlib import Path
 import pickle
+import re
 from tkinter import Label, Tk
 from PIL import Image, ImageTk
 import argparse
+import os
 
 parser = argparse.ArgumentParser(
     description="Visualize clusters using Best Maching Units calculated"
@@ -29,13 +34,23 @@ for i, (x, y) in enumerate(bmu_locations):
     j = i + 1
     while j < len(bmu_locations):
         if (x, y) == (bmu_locations[j][0], bmu_locations[j][1]):
-            print(f"obj{i+1} returns the same BMU as obj{j+1}")
+            print(f"obj{i+1} returns the same BMU as obj{j+1}, at BMU location {x},{y}")
         j += 1
 
+file_pattern = re.compile(r".*?(\d+).*?")
+
+
+def get_order(file):
+    match = file_pattern.match(Path(file).name)
+    if not match:
+        return math.inf
+    return int(match.groups()[0])
+    
 labels = [Label] * 153
-for i in range(153):
-    image = Image.open("../dataset/contours/obj_" + str(i + 1) + ".png")
-    image = image.resize((50, 50))
+dir = "../dataset/contours" 
+for i,f in enumerate(sorted(glob.glob(dir + "/*.png"), key=get_order)):
+    image = Image.open(f)
+    image = image.resize((40, 40))
     image = ImageTk.PhotoImage(image)
     labels[i] = Label(image=image)
     labels[i].config(borderwidth=0)
