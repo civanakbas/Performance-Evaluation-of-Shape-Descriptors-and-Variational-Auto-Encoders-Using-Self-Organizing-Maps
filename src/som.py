@@ -52,6 +52,8 @@ class SOM(nn.Module):
         self, input: torch.Tensor, current_iter: int, max_iter: int
     ) -> float:
 
+        batch_size = input.size()[0]
+
         iter_correction = 1.0 - current_iter / max_iter
         lr = self.lr * iter_correction
         sigma = self.sigma * iter_correction
@@ -68,6 +70,7 @@ class SOM(nn.Module):
 
         delta = lr_locations * (input.unsqueeze(2) - self.weight)
         delta = delta.sum(dim=0)
+        delta.div_(batch_size)
         self.weight.data.add_(delta)
 
         return loss

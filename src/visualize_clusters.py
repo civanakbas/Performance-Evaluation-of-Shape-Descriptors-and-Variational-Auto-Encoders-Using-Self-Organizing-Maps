@@ -46,11 +46,11 @@ def get_order(file):
         return math.inf
     return int(match.groups()[0])
     
-labels = [Label] * 153
+labels = [Label] * 78
 dir = "../dataset/contours" 
 for i,f in enumerate(sorted(glob.glob(dir + "/*.png"), key=get_order)):
     image = Image.open(f)
-    image = image.resize((40, 40))
+    image = image.resize((50, 50))
     image = ImageTk.PhotoImage(image)
     labels[i] = Label(image=image)
     labels[i].config(borderwidth=0)

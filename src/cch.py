@@ -16,13 +16,13 @@ Alg = Algorithms()
 device = "cuda:0" if torch.cuda.is_available() else "cpu"
 
 DATA_DIR = "../dataset/cut/"
-batch_size = 32
-total_epoch = 200
+batch_size = 128
+total_epoch = 2000
 train = True
 
 
 # Size of the output map
-out_size = (17, 17)
+out_size = (9, 9)
 
 file_pattern = re.compile(r".*?(\d+).*?")
 

@@ -66,11 +66,11 @@ def unbatch(tensor):
 
 from som import SOM
 
-batch_size = 16
-total_epoch = 200
+batch_size = 128
+total_epoch = 2000
 train = True
 
-out_size = (17, 17)
+out_size = (9, 9)
 transform = transforms.ToTensor()
 vae_encoded_list = torch.Tensor(unbatch(encoded_with_batch))
 vae_encoded_list = vae_encoded_list.cpu()
