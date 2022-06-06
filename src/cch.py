@@ -22,7 +22,7 @@ train = True
 
 
 # Size of the output map
-out_size = (9, 9)
+out_size = (17, 17)
 
 file_pattern = re.compile(r".*?(\d+).*?")
 

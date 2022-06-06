@@ -1,4 +1,3 @@
-# Dünyanın en kötü kodu.
 import os
 import pickle
 import cv2 as cv
@@ -22,7 +21,7 @@ def get_dict(loc):
     return dict
 
 def save_figs(dict,loc):
-    dir = f"../results/{loc}"
+    dir = f"../results/cross_bmus/{loc}"
     for f in os.listdir(dir):
         f = os.path.join(dir,f)
         # print(f)
@@ -39,19 +38,28 @@ def save_figs(dict,loc):
             axs[i].set_title(str(objs[i]))
             axs[i].set_yticks([])
             axs[i].set_xticks([])
-        plt.savefig(f"../results/{loc}/{key}.png")
+        plt.savefig(f"../results/cross_bmus/{loc}/{key}.png")
         plt.close()
 
 
 dict = get_dict("pgh")
+print("Saving figs for pgh")
 save_figs(dict,"pgh")
+
 dict = get_dict("ca")
+print("Saving figs for chordarc")
 save_figs(dict,"ca")
+
 dict = get_dict("cbsd")
+print("Saving figs for cbsd")
 save_figs(dict,"cbsd")
+
 dict = get_dict("cch")
+print("Saving figs for cch")
 save_figs(dict,"cch")
+
 dict = get_dict("vae")
+print("Saving figs for vae")
 save_figs(dict,"vae")
 
 

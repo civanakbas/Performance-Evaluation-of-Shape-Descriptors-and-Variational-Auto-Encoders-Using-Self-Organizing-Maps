@@ -70,7 +70,7 @@ batch_size = 128
 total_epoch = 2000
 train = True
 
-out_size = (9, 9)
+out_size = (17, 17)
 transform = transforms.ToTensor()
 vae_encoded_list = torch.Tensor(unbatch(encoded_with_batch))
 vae_encoded_list = vae_encoded_list.cpu()
