@@ -35,7 +35,7 @@ for filename in sorted(glob.glob(DATA_DIR + "/*.png"), key=get_order):
 train_dataset = torch.Tensor(contour_list)
 
 image_size = 100 * 100
-batch_size = 8
+batch_size = 32
 epochs = 2000
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")

@@ -43,7 +43,7 @@ histogram_list = []
 for img in image_list:
     histogram_list.append(Alg.calculate_histogram(img))
 
-# histogram_list = preprocessing.normalize(histogram_list)
+histogram_list = preprocessing.normalize(histogram_list)
 transform = transforms.ToTensor()
 histogram_list = torch.Tensor(histogram_list)
 
