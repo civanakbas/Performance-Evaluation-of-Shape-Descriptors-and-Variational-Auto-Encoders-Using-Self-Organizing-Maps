@@ -1,11 +1,9 @@
-from unittest import result
 import numpy as np
 import cv2 as cv
-import matplotlib.pyplot as plt
 import os
 import math
-from sklearn import preprocessing
 from scipy.spatial.distance import cdist
+from scipy.interpolate import splprep, splev
 
 
 class Algorithms:
@@ -114,6 +112,19 @@ class Algorithms:
         compass_bearing = (initial_bearing + 360) % 360
 
         return compass_bearing
+    def _smoothen_image(self,contours):
+
+        smoothened = []
+        for contour in contours:
+            x,y = contour.T
+            x = x.tolist()[0]
+            y = y.tolist()[0]
+            tck, u = splprep([x,y], u=None, s=1.0, per=1)
+            u_new = np.linspace(u.min(), u.max(), 25)
+            x_new, y_new = splev(u_new, tck, der=0)
+            res_array = [[[int(i[0]), int(i[1])]] for i in zip(x_new,y_new)]
+            smoothened.append(np.asarray(res_array, dtype=np.int32))
+        return smoothened
 
     def _check_direction(self, degree):
         """
@@ -139,6 +150,7 @@ class Algorithms:
     def get_chain_code_histogram(self, image):
         histogram = [0] * 8
         contours = self.get_all_contours(image)
+        contours = self._smoothen_image(contours)
         contours = np.array(contours)
         contours = contours.reshape(contours.shape[1], 2)
 
