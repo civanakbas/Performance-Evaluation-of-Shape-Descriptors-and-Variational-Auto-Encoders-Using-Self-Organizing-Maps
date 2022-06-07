@@ -203,10 +203,34 @@ class Algorithms:
                 j = j + 1
             i = i + 1
 
-        col = np.sum(histogram, axis=0)
-        row = np.sum(histogram, axis=1)
+        # Calculate feature vector f_pgh using conditional probabilites
+        f_pgh_row = []
+        for idx, row in enumerate(histogram):
+            row_sum_j = 0
+            row_sum = 0
+            for val in row:
+                row_sum_j += (idx+1)*val
+                row_sum += val
+            # print(f"At row {idx}, the row_sum_j is {row_sum_j}, the row_sum is {row_sum}")
+            if row_sum == 0:
+                f_pgh_row.append(0)
+            else:
+                f_pgh_row.append(row_sum_j / row_sum)
+        f_pgh_col = []
 
-        return np.concatenate((row, col))
+        for idx, col in enumerate(histogram.T):
+            col_sum_j = 0
+            col_sum = 0
+            for val in col:
+                col_sum_j += (idx+1)*val
+                col_sum += val
+            # print(f"At row {idx}, the row_sum_j is {col_sum_j}, the row_sum is {col_sum}")
+            if col_sum == 0:
+                f_pgh_col.append(0)
+            else:
+                f_pgh_col.append(col_sum_j / col_sum)
+
+        return np.concatenate((f_pgh_row,f_pgh_col))
 
     def _cross_product(self, A):
 

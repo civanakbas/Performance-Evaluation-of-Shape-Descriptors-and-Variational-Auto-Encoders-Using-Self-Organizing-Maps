@@ -39,8 +39,7 @@ if not os.path.exists(RESULT_DIR):
 train_dataset = torch.Tensor(contour_list)
 
 image_size = 100 * 100
-batch_size = 16
-epochs = 700
+batch_size = 8
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 

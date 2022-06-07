@@ -46,7 +46,7 @@ def get_order(file):
         return math.inf
     return int(match.groups()[0])
     
-labels = [Label] * 78
+labels = [Label] * 90
 dir = "../dataset/contours" 
 for i,f in enumerate(sorted(glob.glob(dir + "/*.png"), key=get_order)):
     image = Image.open(f)

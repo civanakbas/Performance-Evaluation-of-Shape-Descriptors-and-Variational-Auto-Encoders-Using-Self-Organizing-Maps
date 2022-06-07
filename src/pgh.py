@@ -11,6 +11,7 @@ import math
 from som import SOM
 from algorithms import Algorithms
 import pickle
+from sklearn import preprocessing
 
 Alg = Algorithms()
 device = "cuda:0" if torch.cuda.is_available() else "cpu"
@@ -42,6 +43,7 @@ histogram_list = []
 for img in image_list:
     histogram_list.append(Alg.calculate_histogram(img))
 
+# histogram_list = preprocessing.normalize(histogram_list)
 transform = transforms.ToTensor()
 histogram_list = torch.Tensor(histogram_list)
 
