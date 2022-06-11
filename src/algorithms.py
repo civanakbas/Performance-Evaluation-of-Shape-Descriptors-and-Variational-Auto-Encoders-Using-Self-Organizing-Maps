@@ -459,7 +459,7 @@ class Algorithms:
         #     for j in range(len(image[0])):
         #         if image[i,j,0] ==  0:
         #             area += 1
-        method_3 = (4 * np.pi * area) / (perimeter ** 2)
+        method_3 =  (perimeter ** 2) / (4 * np.pi * area)
         print("Compactness: ", method_3)
 
 
