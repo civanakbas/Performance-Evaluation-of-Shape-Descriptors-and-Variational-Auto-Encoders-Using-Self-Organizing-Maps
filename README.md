@@ -19,7 +19,7 @@ There are 2 simple demos for Self Organizing Maps. One for MNIST and one for ran
 python mnist_demo.py
 python color_demo.py
 ```
-For MNIST demo generated images are in `../result/ folder by default.
+For MNIST demo generated images are in `../result/` folder by default.
 
 ## Roughly Visualize Maps
 To roughly visualize the output maps use `python visualize_clusters.py --descriptor cch/pgh/cbsd/ca/vae`
