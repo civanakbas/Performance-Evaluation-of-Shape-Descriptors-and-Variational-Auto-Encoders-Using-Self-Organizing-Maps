@@ -1,3 +1,4 @@
+from matplotlib import pyplot as plt
 import numpy as np
 import cv2 as cv
 import os
@@ -7,6 +8,12 @@ from scipy.interpolate import splprep, splev
 
 
 class Algorithms:
+    def __init__(self) -> None:
+        self.sinc_lut = {}
+        for i in range(360):
+            res = round(math.degrees(np.sinc(math.radians(i) / np.pi)), 4)
+            self.sinc_lut[res] = i
+            
     def get_all_contours(self, image=None):
         """
         Returns all of the contours from the dataset.
@@ -264,10 +271,6 @@ class Algorithms:
         A float feature set = [Sum of convex angles, Sum of concave angles, Mean of convex angles, Mean of concave angles, Variance of convex angles, Variance of concave angles, Total number of angles]
 
         """
-        sinc_lut = {}
-        for i in range(360):
-            res = round(math.degrees(np.sinc(math.radians(i) / np.pi)), 4)
-            sinc_lut[res] = i
         start = points[0]
         stop = points[2]
         arc_length = np.linalg.norm(points[0] - points[1])
@@ -277,7 +280,7 @@ class Algorithms:
         convex_angles = []
         concave_angles = []
         if cv.isContourConvex(points):
-            convex_angles.append(sinc_lut[0])
+            convex_angles.append(self.sinc_lut[0])
         else:
             for i in range(N):
 
@@ -291,8 +294,8 @@ class Algorithms:
                         x = round(
                             math.degrees(np.linalg.norm(start - stop) / arc_length)
                         ,4)
-                        x = self._get_sinc_degree(sinc_lut, x)
-                        concave_angles.append(sinc_lut[x])
+                        x = self._get_sinc_degree(self.sinc_lut, x)
+                        concave_angles.append(self.sinc_lut[x])
                         start = temp[0]
                         arc_length = np.linalg.norm(temp[0] - temp[1]) + np.linalg.norm(
                             temp[1] - temp[2]
@@ -312,12 +315,12 @@ class Algorithms:
                         x = round(
                             math.degrees(np.linalg.norm(start - stop) / arc_length)
                         ,4)
-                        x = self._get_sinc_degree(sinc_lut, x)
+                        x = self._get_sinc_degree(self.sinc_lut, x)
                         if curr > 0:
-                            concave_angles.append(sinc_lut[x])
+                            concave_angles.append(self.sinc_lut[x])
                             #print("concave bulduk ve ekledik")
                         elif curr < 0:
-                            convex_angles.append(sinc_lut[x])
+                            convex_angles.append(self.sinc_lut[x])
                             #print("convex bulduk ve ekledik")
                         break
 
@@ -327,9 +330,9 @@ class Algorithms:
                         x = round(
                             math.degrees(np.linalg.norm(start - stop) / arc_length)
                         ,4)
-                        x = self._get_sinc_degree(sinc_lut, x)
+                        x = self._get_sinc_degree(self.sinc_lut, x)
                         #print("convex bulduk ve ekledik")
-                        convex_angles.append(sinc_lut[x])
+                        convex_angles.append(self.sinc_lut[x])
                         start = temp[0]
                         arc_length = np.linalg.norm(temp[0] - temp[1]) + np.linalg.norm(
                             temp[1] - temp[2]
@@ -347,12 +350,12 @@ class Algorithms:
                         x = round(
                             math.degrees(np.linalg.norm(start - stop) / arc_length)
                         ,4)
-                        x = self._get_sinc_degree(sinc_lut, x)
+                        x = self._get_sinc_degree(self.sinc_lut, x)
                         if curr > 0:
-                            concave_angles.append(sinc_lut[x])
+                            concave_angles.append(self.sinc_lut[x])
                             #print("concave bulduk ve ekledik")
                         elif curr < 0:
-                            convex_angles.append(sinc_lut[x])
+                            convex_angles.append(self.sinc_lut[x])
                             #print("convex bulduk ve ekledik")
                         break
 
@@ -374,9 +377,9 @@ class Algorithms:
             var_cave = np.var(concave_angles)
 
         total_arcs = len(convex_angles) + len(concave_angles)
-        print("--------------------")
-        print("Concave angles: ", concave_angles)
-        print("Convex angles: ", convex_angles)
+        # print("--------------------")
+        # print("Concave angles: ", concave_angles)
+        # print("Convex angles: ", convex_angles)
         return np.array(
             [sumvex, sumcave, mean_vex, mean_cave, var_vex, var_cave, total_arcs]
         )
@@ -407,13 +410,13 @@ class Algorithms:
 
         contours = self.get_all_contours(image)
         img_contour = np.zeros([100, 100, 1], dtype=np.uint8)
-        img_hull = np.zeros([100, 100, 1], dtype=np.uint8)
+        #img_hull = np.zeros([100, 100, 1], dtype=np.uint8)
         img_contour.fill(255)
-        img_hull.fill(255)
+        #img_hull.fill(255)
         for cnt in contours:
-            cv.drawContours(img_contour, [cnt], 0, (0), 1)
+            cv.drawContours(img_contour, [cnt], 0, (0), 1)      
             hull = cv.convexHull(cnt)
-            cv.drawContours(img_hull, [hull], 0, (0), 1)
+            #cv.drawContours(img_hull, [hull], 0, (0), 1)
         mu = cv.moments(contours[0])     
         mc = [
             mu["m10"] / (mu["m00"] ),
@@ -422,7 +425,8 @@ class Algorithms:
 
         # Calculating the convexity
         perimeter = round(cv.arcLength(contours[0], True))
-        hull_perimeter = 0
+        hull_perimeter = cv.arcLength(hull, True)
+        #hull_perimeter = 0
         x = []
         y = []
         for i in range(len(img_contour)):
@@ -430,11 +434,12 @@ class Algorithms:
                 if img_contour[i, j, 0] == 0:
                     x.append(i)
                     y.append(j)
-
-        for i in range(len(img_hull)):
-            for j in range(len(img_hull)):
-                if img_hull[i, j, 0] == 0:
-                    hull_perimeter += 1
+        # for i in range(len(img_hull)):
+        #     for j in range(len(img_hull)):
+        #         if img_hull[i, j, 0] == 0:
+        #             hull_perimeter += 1
+        
+        
         method_1 = hull_perimeter / perimeter
         print("Convexity :", method_1)
 
@@ -447,8 +452,8 @@ class Algorithms:
         for i in range(len(x)):
             sum += (x[i] - mean_x) * (y[i] - mean_y)
         cov = sum / (len(x) - 1)
-        e1 = vy + vx - np.sqrt((vx + vy) ** 2 - 4 * (vx * vy - cov ** 2))
-        e2 = vy + vx + np.sqrt((vx + vy) ** 2 - 4 * (vx * vy - cov ** 2))
+        e1 = vy + vx - np.sqrt(((vx + vy) ** 2) - 4 * (vx * vy - (cov ** 2)))
+        e2 = vy + vx + np.sqrt(((vx + vy) ** 2) - 4 * (vx * vy - (cov ** 2)))
         method_2 = e1 / e2
         print("Temel Eksenler :", method_2)
 
@@ -463,42 +468,17 @@ class Algorithms:
         print("Compactness: ", method_3)
 
 
-
         # Circular Variance
         dists_to_var = []
-        offset = 30
-        for cnt in contours:
-            for c in cnt:
-                c[0, 0] += offset
-                c[0, 1] += offset
         radius = round(perimeter / (2 * math.pi))
-        drawing = np.zeros((150, 150, 1), dtype=np.uint8)
-        drawing_2 = np.zeros((150, 150, 1), dtype=np.uint8)
-        mc[0] += offset
-        mc[1] += offset
-        cv.circle(
-                drawing,
-                (int(mc[0]) + offset, int(mc[1]) + offset),
-                radius,
-                (255),
-                1,
-        )
-        cv.drawContours(drawing_2, contours, 0, 255, 1)
-        circle_points = np.transpose(
-            np.where(drawing == 255)
-        )  # Returns the points where drawings pixels equals to 255
-        cnt_points = np.transpose(np.where(drawing_2 == 255))
-        real_cnt = []
-        for cnt in cnt_points:  # Formatting the contour points for distance calculation
-            real_cnt.append([cnt[0], cnt[1]])
-        real_cnt = np.array(real_cnt)
-        for p in real_cnt:
-            dists_to_var.append(np.abs(np.linalg.norm(mc - p) - radius))
+        lenx = len(x)
+        for i in range(lenx):
+            dists_to_var.append(np.abs(np.linalg.norm(mc - np.array([x[i],y[i]])) - radius))
         #diff = np.abs(np.sqrt((mc[0]-real_cnt[0][0])**2 + (mc[1] - real_cnt[0][1])**2) - radius)
-        mean_dist = np.sum(dists_to_var) / len(real_cnt)
+        mean_dist = np.sum(dists_to_var) / lenx
         summy = 0
         for dist in dists_to_var:
             summy += (mean_dist - dist) ** 2
-        method_4 = summy / ((len(real_cnt) - 1) * (radius ** 2))
+        method_4 = summy / ((lenx - 1) * (radius ** 2))
         print("Circular Variance: ", method_4)
         return np.array([method_1, method_2, method_3, method_4])
